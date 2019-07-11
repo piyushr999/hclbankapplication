@@ -9,10 +9,14 @@ import org.springframework.stereotype.Repository;
 
 import com.hcl.bank.hclbank.entity.Transaction;
 
+/**
+ * @author Administrator
+ *
+ */
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 	
-	@Query( value = "select * from Transaction where from_Account = :id or to_Account = :id", nativeQuery = true)
+	@Query( value = "select * from Transaction where from_Account = :id or to_Account = :id order by transaction_date desc", nativeQuery = true)
 	List<Transaction> getTransactions(@Param("id") Long id);
 
 }

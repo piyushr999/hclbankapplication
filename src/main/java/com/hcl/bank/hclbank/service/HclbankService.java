@@ -20,6 +20,10 @@ import com.hcl.bank.hclbank.repository.AccountRepository;
 import com.hcl.bank.hclbank.repository.TransactionRepository;
 import com.hcl.bank.hclbank.repository.UserRepository;
 
+/**
+ * @author Administrator
+ *
+ */
 @Service
 public class HclbankService {
 
@@ -32,12 +36,16 @@ public class HclbankService {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
+	/**
+	 * This method is used to create new users with their account
+	 * 
+	 * @param userDto
+	 * @return Success message
+	 *
+	 */
 	public String createUser(UserDto userDto) {
-		
-	 
-		
 		if (userDto.getPwd().equals(userDto.getConfirmpwd())) {
-			
+
 			User user = new User();
 			user.setUserName(userDto.getuName());
 			user.setPassword(userDto.getPwd());
@@ -45,7 +53,7 @@ public class HclbankService {
 			user.setDob(userDto.getBirthDate());
 			user.setGender(userDto.getSex());
 			user.setPhoneNumber(userDto.getContactNumber());
-			
+
 			while (true) {
 				Long randomAccountNumber = (long) Math.floor(100000 + Math.random() * 900000);
 				if (!accountRepository.existsByAccountNumber(randomAccountNumber)) {
@@ -66,15 +74,23 @@ public class HclbankService {
 
 	}
 
+	/**
+	 * This method is used for fund transfer from one account to another account.
+	 * 
+	 * @param fundTransferDto
+	 * @return Success message
+	 *
+	 */
 	public void fundTransfer(FundTransferDto fundTransferDto) {
 
 		AccountDetails fromAccount = accountRepository.findByAccountNumber(fundTransferDto.getFromAccount());
+		fromAccount.setAcountBalance(fromAccount.getAcountBalance() - fundTransferDto.getAmount());
 		AccountDetails toAccount = accountRepository.findByAccountNumber(fundTransferDto.getToAccount());
-
+		toAccount.setAcountBalance(toAccount.getAcountBalance() + fundTransferDto.getAmount());
+		
 		Transaction transaction = new Transaction();
 		transaction.setFromAcount(fromAccount);
 		transaction.setToAccount(toAccount);
-
 		transaction.setAmount(fundTransferDto.getAmount());
 		transaction.setTransactionDate(new Date());
 
@@ -82,10 +98,17 @@ public class HclbankService {
 
 	}
 
+	/**
+	 * This method is used for login and show all transactions
+	 * 
+	 * @param loginDto
+	 * @return List of all the transactions
+	 *
+	 */
 	public List<Transaction> userLogin(LoginDto loginDto) {
 
 		List<User> userList = userRepository.findByUserName(loginDto.getUserName());
-		if ( !userList.isEmpty() && userList.get(0).getPassword().equals(loginDto.getPassword())) {
+		if (!userList.isEmpty() && userList.get(0).getPassword().equals(loginDto.getPassword())) {
 			Optional<AccountDetails> optionalAccDetails = accountRepository.findById(userList.get(0).getId());
 
 			if (optionalAccDetails.isPresent()) {

@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.hcl.bank.hclbank.entity.AccountDetails;
 
+/**
+ * @author Administrator
+ *
+ */
 @Repository
 public interface AccountRepository extends JpaRepository<AccountDetails, Long> {
 	

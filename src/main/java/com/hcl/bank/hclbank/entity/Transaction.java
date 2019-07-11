@@ -12,9 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@JsonSerialize
+/**
+ * @author Administrator
+ *
+ */
 @Entity
 public class Transaction implements Serializable {
 
@@ -33,10 +36,12 @@ public class Transaction implements Serializable {
 
 	private double amount;
 
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "from_account")
 	private AccountDetails fromAcount;
 
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "to_account")
 	private AccountDetails toAccount;
@@ -94,8 +99,5 @@ public class Transaction implements Serializable {
 		return "Transaction [id=" + id + ", transactionDate=" + transactionDate + ", transactionType=" + transactionType
 				+ ", amount=" + amount + ", fromAcount=" + fromAcount + ", toAccount=" + toAccount + "]";
 	}
-	
-	
 
-	
 }

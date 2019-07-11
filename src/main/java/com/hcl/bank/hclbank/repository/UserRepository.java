@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.hcl.bank.hclbank.entity.User;
 
+/**
+ * @author Administrator
+ *
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	

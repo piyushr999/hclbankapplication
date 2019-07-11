@@ -1,5 +1,9 @@
 package com.hcl.bank.hclbank.entity.dto;
 
+/**
+ * @author Administrator
+ *
+ */
 public class UserDto {
 
 	private String uName;
